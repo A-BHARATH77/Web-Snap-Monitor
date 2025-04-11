@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head', { title: 'Tracked Websites' }) %>
+
+<body class="fade-in">
+  <div class="container">
+    <h1 class="header">Tracked Websites</h1>
+    
+    <div class="card">
+      <form action="/add-website" method="POST">
+        <div class="form-group">
+          <input type="text" name="name" placeholder="Website Name" required>
+        </div>
+        <div class="form-group">
+          <input type="url" name="url" placeholder="https://example.com" required>
+        </div>
+        <button type="submit" class="btn">Add Website</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <% if (websites.length === 0) { %>
+        <p>No websites being tracked yet.</p>
+      <% } else { %>
+        <ul class="website-list">
+          <% websites.forEach(website => { %>
+            <li>
+              <a href="/website/<%= website._id %>" class="website-link">
+                <%= website.name %>
+                <span><%= website.url %></span>
+              </a>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

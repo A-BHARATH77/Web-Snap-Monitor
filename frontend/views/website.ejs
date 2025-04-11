@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head', { title: website.name + ' - Keyframes' }) %>
+
+<body class="fade-in">
+  <div class="container">
+    <h1 class="header"><%= website.name %></h1>
+    <p class="website-url"><a href="<%= website.url %>" target="_blank"><%= website.url %></a></p>
+
+    <div class="card scan-controls">
+      <form action="/start-scan/<%= website._id %>" method="POST" style="display: inline;">
+        <button type="submit" class="btn">Start Auto-Scan</button>
+      </form>
+      <form action="/stop-scan/<%= website._id %>" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-stop">Stop</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Change History</h2>
+      <% if (frames.length === 0) { %>
+        <p>No keyframes detected yet.</p>
+      <% } else { %>
+        <div class="keyframes-grid">
+          <% frames.forEach(frame => { %>
+            <div class="keyframe-item">
+              <img src="/images/<%= frame.imagePath %>" alt="Change detected at <%= frame.timestamp %>">
+              <div class="keyframe-meta">
+                <p><%= new Date(frame.timestamp).toLocaleString() %></p>
+                <p class="diff-percent"><%= frame.diffPercentage.toFixed(2) %>% changed</p>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <a href="/" class="back-link">← Back to all websites</a>
+  </div>
+</body>
+</html>

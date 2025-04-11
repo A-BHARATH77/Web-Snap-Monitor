@@ -1,0 +1,76 @@
+<!DOCTYPE html> website.ejs
+<html>
+<head>
+    <title><%= website.name %> - Keyframes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet"></head>
+</head>
+<body>
+    <div class="website-header">
+        <h1><%= website.name %></h1>
+        <p>
+            <a href="<%= website.url %>" target="_blank"><%= website.url %></a>
+        </p>
+    </div>
+
+    <div class="scan-controls">  
+        <form action="/start-scan/<%= website._id %>" method="POST" style="display: inline-block; margin-right: 10px;">
+            <button type="submit">Start Auto-Scan (15s)</button>
+        </form>
+        
+        <form action="/stop-scan/<%= website._id %>" method="POST" style="display: inline-block;">
+            <button type="submit">Stop Auto-Scan</button>
+        </form>
+        
+        <p id="scan-status">
+            <%= typeof autoScanActive !== 'undefined' && autoScanActive ? 
+                'Auto-scanning every 15 seconds...' : 'Auto-scan stopped' %>
+        </p>
+    </div>
+
+    <h2>Keyframes</h2>
+    
+    <% if (frames.length === 0) { %>
+        <p>No keyframes yet. Click "Scan Now" to check for changes.</p>
+    <% } else { %>
+        <div class="keyframes-grid">
+            <% frames.forEach(frame => { %>
+                <div class="keyframe-item">
+                    <img src="/images/<%= frame.imagePath %>" alt="Keyframe at <%= new Date(frame.timestamp).toLocaleString() %>">
+                    <p>Detected at: <%= new Date(frame.timestamp).toLocaleString() %></p>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+
+    <p class="back-link">
+        <a href="/">← Back to all websites</a>
+    </p>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Website Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet"></head>
+<body>
+    <h1>Tracked Websites</h1>
+    
+    <form action="/add-website" method="POST">
+        <input type="text" name="name" placeholder="Website name" required>
+        <input type="url" name="url" placeholder="https://example.com" required>
+        <button type="submit">Add Website</button>
+    </form>
+    
+    <ul>
+        <% websites.forEach(website => { %>
+            <li>
+                <a href="/website/<%= website._id %>"><%= website.name %></a>
+                (<a href="<%= website.url %>" target="_blank"><%= website.url %></a>)
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>index.ejs
